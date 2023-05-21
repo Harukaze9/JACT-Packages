@@ -1,0 +1,30 @@
+{
+    "__on_install": "mkdir -p ~/.jact/backups",
+    "__exec": "__jact_store -c backups -o list ",
+    "list": {
+        "__exec": "__jact_store -c backups -o list "
+    },
+    "test": {
+        "__exec": "bn=\"`basename {0}`-`date +'%Y-%m-%d-%H-%M-%S'`\"; echo; echo $bn"
+    },
+    "raw": {
+        "__exec": "bn=\"`basename {0}`-`date +'%Y-%m-%d-%H-%M-%S'`\";cp {0} ~/.jact/backups/${bn}; __jact_store -c backup -o add -k ${bn} -v `readlink -f {0}`",
+        "__default": "echo \"Error: Please specify Arguments! Usage: jj-backup save </path/to/file> <name>\""
+    },
+    "zip": {
+        "__exec": "cp {0} ~/.jact/backups/{0}; __jact_store -c backup -o add -k {1}; -v \"~/.jact/backups/{1}\"",
+        "__default": "echo \"Error: Please specify Arguments! Usage: jj-backup save </path/to/file> <name>\""
+    },
+    "peek": {
+        "__exec": "less ~/.jact/backups/{0};",
+        "__0": "__jact_store -c backup -o complement"
+    },
+    "remove": {
+        "__exec": "__jact_store -c backup -o remove -k {0}; ; rm ~/.jact/backups/{0}",
+        "__0": "__jact_store -c backup -o complement"
+    },
+    "restore": {
+        "__exec": "cp ~/.jact/backups/{0} {0}",
+        "__0": "__jact_store -c backup -o complement"
+    }
+}
